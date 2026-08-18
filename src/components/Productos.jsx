@@ -1,4 +1,9 @@
+import { useState } from "react";
+
 function Productos() {
+
+  const [favoritos, setFavoritos] = useState([]);
+
   const productos = [
     {
       id: 1,
@@ -37,57 +42,161 @@ function Productos() {
     },
   ];
 
+
+  /* FAVORITOS */
+
+  const toggleFavorito = (id) => {
+
+    setFavoritos((favoritosActuales) => {
+
+      if (favoritosActuales.includes(id)) {
+
+        return favoritosActuales.filter(
+          (favoritoId) => favoritoId !== id
+        );
+
+      }
+
+      return [
+        ...favoritosActuales,
+        id
+      ];
+
+    });
+
+  };
+
+
   return (
-    <section className="products-section" id="productos">
+
+    <section
+      className="products-section"
+      id="productos"
+    >
+
+      {/* ENCABEZADO */}
+
       <div className="section-heading">
+
         <div>
-          <p className="section-label">NUEVA COLECCIÓN</p>
-          <h2>DROP <span>01</span></h2>
+
+          <p className="section-label">
+            NUEVA COLECCIÓN
+          </p>
+
+          <h2>
+            DROP <span>01</span>
+          </h2>
+
         </div>
 
         <p className="section-description">
           Descubre nuestra selección de prendas
           esenciales para elevar tu estilo.
         </p>
+
       </div>
+
+
+      {/* PRODUCTOS */}
 
       <div className="products-grid">
-        {productos.map((producto) => (
-          <article className="product-card" key={producto.id}>
-            
-            <div className="product-image-container">
-              <img
-                src={producto.imagen}
-                alt={producto.nombre}
-                className="product-image"
-              />
 
-              <span className="product-category">
-                {producto.categoria}
-              </span>
+        {productos.map((producto) => {
 
-              <button className="favorite-button">
-                ♡
-              </button>
-            </div>
+          const esFavorito =
+            favoritos.includes(producto.id);
 
-            <div className="product-info">
-              <h3>{producto.nombre}</h3>
+          return (
 
-              <div className="product-bottom">
-                <span className="price">
-                  {producto.precio}
+            <article
+              className="product-card"
+              key={producto.id}
+            >
+
+              {/* IMAGEN */}
+
+              <div className="product-image-container">
+
+                <img
+                  src={producto.imagen}
+                  alt={producto.nombre}
+                  className="product-image"
+                />
+
+
+                {/* CATEGORÍA */}
+
+                <span className="product-category">
+                  {producto.categoria}
                 </span>
 
-                <button className="add-button">
-                  +
+
+                {/* FAVORITO */}
+
+                <button
+                  type="button"
+                  className={`favorite-button ${
+                    esFavorito
+                      ? "favorite-active"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    toggleFavorito(producto.id)
+                  }
+                  aria-label={
+                    esFavorito
+                      ? "Quitar de favoritos"
+                      : "Agregar a favoritos"
+                  }
+                >
+                  {esFavorito ? "♥" : "♡"}
                 </button>
+
               </div>
-            </div>
-          </article>
-        ))}
+
+
+              {/* INFORMACIÓN */}
+
+              <div className="product-info">
+
+                <h3>
+                  {producto.nombre}
+                </h3>
+
+
+                <div className="product-bottom">
+
+                  <span className="price">
+                    {producto.precio}
+                  </span>
+
+
+                  {/* + VISUAL - TODAVÍA NO FUNCIONA */}
+
+                  <button
+                    type="button"
+                    className="add-button"
+                    onClick={() => {}}
+                    aria-label="Agregar al carrito"
+                  >
+                    +
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+
+          );
+
+        })}
+
       </div>
+
     </section>
+
   );
 }
 
